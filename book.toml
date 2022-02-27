@@ -1,0 +1,6 @@
+[book]
+authors = ["wudejin"]
+language = "en"
+multilingual = false
+src = "src"
+title = "A Graceful Rust Tutorial For Rustacean"
