@@ -1,6 +1,9 @@
 [book]
-authors = ["wudejin"]
-language = "en"
+authors = ["Avizii"]
+language = "zh-CN"
 multilingual = false
 src = "src"
 title = "A Graceful Rust Tutorial For Rustacean"
+
+[rust]
+edition = "2021"

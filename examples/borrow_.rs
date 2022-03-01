@@ -5,13 +5,9 @@
 // https://dhghomon.github.io/easy_rust/Chapter_42.html
 
 use std::borrow::{Borrow, BorrowMut, Cow};
+use reqwest::Url;
 
-fn main() {
-    borrow_trait();
-
-    borrow_mut_trait();
-}
-
+fn main() {}
 
 // Borrow trait
 fn borrow_trait() {
@@ -75,13 +71,11 @@ fn borrow_mut_trait() {
     // array
     let mut a1: [i32; 4] = [1, 2, 3, 4];
     let a2: &mut [i32; 4] = a1.borrow_mut();  // impl<T> BorrowMut<T> for T
-    assert_eq!(a2, &a1);
     let _a3: &mut [i32] = a1.borrow_mut(); // impl<T, const N: usize> BorrowMut<[T]> for [T; N]
 
     // vec
     let mut v1: Vec<i32> = vec![1, 2, 3, 4];
     let v2: &mut Vec<i32> = v1.borrow_mut(); // impl<T> BorrowMut<T> for T
-    assert_eq!(v2, &v1);
     let _v3: &mut [i32] = v1.borrow_mut(); // impl<T> BorrowMut<[T]> for Vec<T, Global>
 
     // impl BorrowMut<T> for U
@@ -90,13 +84,85 @@ fn borrow_mut_trait() {
 }
 
 fn to_owned_trait() {
+    // different from Clone trait,
+    // Clone works only for going from &T to T,
+    // ToOwned can owned data from any borrow of a give type.
 
+    let s: &str = "Rustacean";
+    let _os: String = s.to_owned(); // impl ToOwned for str (type Owned = String)
+
+    let s: String = "Rustacean".to_string();
+    let _os: String = s.to_owned(); // impl<T> ToOwned for T (type Owned = T)
+
+    let v: &[i32] = &[1, 2, 3];
+    let _vo: Vec<i32> = v.to_owned(); // impl<T> ToOwned for [T] (type Owned = Vec<T, Global>)
+
+    let v: &[i32; 3] = &[1, 2, 3];
+    let _vo: [i32; 3] = v.to_owned(); // impl<T> ToOwned for T (type Owned = T)
+
+    // impl ToOwned for T (type Owned = U)
+    //  U must meet condition: impl Borrow<T> for U
+    // let t = T;
+    // let u: U = t.to_owned();
+}
+
+fn copy_trait() {
+
+}
+
+//
+fn clone_trait() {
+    let s: &str = "Rustacean";
+    let _sc: &str = s.clone();
+
+    let s: String = "Rustacean".to_string();
+    let _sc: String = s.clone();
+
+    #[derive(Clone)]
+    struct Reading<T> {
+        frequency: T,
+    }
+    let r: Reading<&str> = Reading { frequency: "String" };
+    let _rc: Reading<&str> = r.clone();
+
+    let source = "Rustacean".to_string();
+    let mut s = String::new();
+    s.clone_from(&source);
 }
 
 fn cow_trait() {
-
+    cow_scene();
 }
 
+fn cow_scene() {
+    let url = Url::parse("https://rust-lang.org/rust?page=1024&sort=desc&extra=hello%20world").unwrap();
+    let mut pairs = url.query_pairs();
+
+    assert_eq!(pairs.count(), 3);
+
+    let (mut k, v) = pairs.next().unwrap();
+
+    println!("key: {}, value: {}", k, v);
+
+    k.to_mut().push_str("_lake");
+
+    print_pair((k, v));
+
+    print_pair(pairs.next().unwrap());
+
+    print_pair(pairs.next().unwrap());
+}
+
+fn print_pair(pair: (Cow<str>, Cow<str>)) {
+    println!("key: {}, value: {}", show_cow(pair.0), show_cow(pair.1));
+}
+
+fn show_cow(cow: Cow<str>) -> String {
+    match cow {
+        Cow::Borrowed(v) => format!("Cow::Borrowed=>{}", v),
+        Cow::Owned(v) => format!("Cow::Owned=>{}", v),
+    }
+}
 
 fn modulo_3(input: u8) -> Cow<'static, str> {
     match input % 3 {
@@ -155,5 +221,20 @@ mod tests {
         print_cow(&input);
         abs_all(&mut input);
         print_cow(&input);
+    }
+
+    #[test]
+    fn test_all_ownership_trait() {
+        borrow_trait();
+
+        borrow_mut_trait();
+
+        to_owned_trait();
+
+        clone_trait();
+
+        copy_trait();
+
+        cow_trait();
     }
 }
