@@ -137,7 +137,7 @@ pub trait Clone {
 | `clone`      | 无       | 返回拷贝后的值，需手动实现                                    |
 | `clone_from` | 有       | 从指定源值拷贝，相比 `clone` 方法，可避免内存分配，提高效率 |
 
-代码如下：
+示例代码如下：
 
 ```rust
 fn main() {
