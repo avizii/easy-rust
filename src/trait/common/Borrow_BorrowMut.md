@@ -9,9 +9,9 @@ where
 }
 ```
 
-`Borrow` 是表示数据借用的行为，得到是不可变引用。
+`Borrow` 是表示数据借用的行为，得到的是不可变引用。
 
-当一个类型实现 `Borrow<T>`，则该类型的对象调用 `.borrow()` 方法可以借用得到一个不可变引用 `&T`。
+当一个类型 `U` 实现 `Borrow<T>`，则该类型的对象调用 `.borrow()`方法可以得到一个不可变引用`&T`，该行为也称之为借用。
 
 伪代码模板如下：
 
@@ -83,7 +83,7 @@ fn main() {
 
 事实上，Rust 默认实现的 `impl<T: ?Sized> Borrow<T> for T `，其实就是不可变引用 `&T`。
 
-### 字符串 `String 借用
+### 字符串 `String` 借用
 
 ```rust
 impl Borrow<str> for String
