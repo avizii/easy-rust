@@ -9,6 +9,27 @@ use reqwest::Url;
 
 fn main() {}
 
+fn auto_borrow() {
+    // 自定义结构体
+    struct AutoBorrow {
+        num: i8,
+    }
+
+    // 创建对象
+    let mut a = AutoBorrow {
+        num: 8,
+    };
+
+    // 调用借用方法
+    let _a1: &AutoBorrow = a.borrow();           // impl<T: ?Sized> Borrow<T> for T
+    let _a3: &AutoBorrow = &a.borrow();          // impl<T: ?Sized> Borrow<T> for &T
+    let _a2: &&AutoBorrow = &a.borrow();         // impl<T: ?Sized> Borrow<T> for T
+    let _a4: &AutoBorrow = &mut a.borrow();      // impl<T: ?Sized> Borrow<T> for &mut T
+    let _a5: &mut &AutoBorrow = &mut a.borrow(); // impl<T: ?Sized> Borrow<T> for T
+
+    assert_eq!(a.borrow(), &a);
+}
+
 // Borrow trait
 fn borrow_trait() {
     // str
