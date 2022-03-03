@@ -26,9 +26,9 @@ let t: &T = u.borrow();
 
 ## 标准库默认实现
 
-### 泛型 `T` 和 `&T` 借用
+### 泛型 `T` / `&T` / `&mut T` 借用
 
-Rust 标准库为泛型 `T` 、 `&T` 、 `&mut T` 自动实现了 `Borrow<T>` trait。
+Rust 标准库为泛型 `T` 、 `&T` 、 `&mut T` 自动实现了 `Borrow<T>`。
 
 ```rust
 #[stable(feature = "rust1", since = "1.0.0")]
@@ -164,5 +164,72 @@ fn main() {
 ```
 
 # `BorrowMut` trait
+
+```rust
+pub trait BorrowMut<Borrowed>: Borrow<Borrowed> 
+where
+    Borrowed: ?Sized, 
+{
+    fn borrow_mut(&mut self) -> &mut Borrowed;
+}
+```
+
+与 `Borrow` 一样，`BorrowMut` 也是表示数据借用的行为，不同的是，它得到的是可变引用。
+
+当一个类型 `U` 实现 `BorrowMut<T>`，则该类型的对象调用 `.borrow_mut()`方法可以得到一个可变引用`&mut T`
+
+还有一点需要注意：`BorrowMut` 继承于 `Borrow`，实现 `BorrowMut` 的类型也必须实现 `Borrow`。
+
+伪代码模板如下：
+
+```rust
+impl Borrow<T> for U {
+    todo!();
+}
+
+impl BorrowMut<T> for U {
+    todo!();
+}
+
+let mut u = U;
+let t: &mut T = u.borrow_mut();
+```
+
+## 标准库实现
+
+与 `Borrow` 一样，Rust 标准库为 `BorrowMut` 提供了大量的默认实现，涵盖了泛型 `T` / `&mut T`、字符串 `String`、数组 `[T; N]`、动态数组 `Vec<T>`:
+
+```rust
+impl<T> BorrowMut<T> for T
+
+impl<'_, T> BorrowMut<T> for &'_ mut T
+
+impl BorrowMut<str> for String
+
+impl<T, const N: usize> BorrowMut<[T]> for [T; N]
+
+impl<T> BorrowMut<[T]> for Vec<T, Global>
+```
+
+示例代码如下：
+
+```rust
+fn main() {
+    // string
+    let mut s1: String = "Rustacean".to_string();
+    let _s2: &mut str = s1.borrow_mut(); // impl BorrowMut<str> for String
+    let _s3: &mut String = s1.borrow_mut(); // impl<T> BorrowMut<T> for T
+
+    // array
+    let mut a1: [i32; 4] = [1, 2, 3, 4];
+    let a2: &mut [i32; 4] = a1.borrow_mut();  // impl<T> BorrowMut<T> for T
+    let _a3: &mut [i32] = a1.borrow_mut(); // impl<T, const N: usize> BorrowMut<[T]> for [T; N]
+
+    // vec
+    let mut v1: Vec<i32> = vec![1, 2, 3, 4];
+    let v2: &mut Vec<i32> = v1.borrow_mut(); // impl<T> BorrowMut<T> for T
+    let _v3: &mut [i32] = v1.borrow_mut(); // impl<T> BorrowMut<[T]> for Vec<T, Global>
+}
+```
 
 # Borrow 与 AsRef 的区别
