@@ -176,7 +176,7 @@ where
 
 与 `Borrow` 一样，`BorrowMut` 也是表示数据借用的行为，不同的是，它得到的是可变引用。
 
-当一个类型 `U` 实现 `BorrowMut<T>`，则该类型的对象调用 `.borrow_mut()`方法可以得到一个可变引用`&mut T`
+当一个类型 `U` 实现 `BorrowMut<T>`，则该类型的对象调用 `.borrow_mut()`方法可以得到一个可变引用 `&mut T`。
 
 还有一点需要注意：`BorrowMut` 继承于 `Borrow`，实现 `BorrowMut` 的类型也必须实现 `Borrow`。
 
