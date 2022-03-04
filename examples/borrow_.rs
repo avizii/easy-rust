@@ -76,7 +76,7 @@ fn borrow_trait() {
     let _c2: &CusBor = c1.borrow(); // impl Borrow<T> for T
     let _c3: &str = c1.borrow(); // impl Borrow<str> for CusBor
     let _c4: &String = c1.borrow(); // impl Borrow<String> for CusBor
-    let _c5: &CusBor = &c1.borrow();  // impl<'_, T> Borrow<T> for &'_ T
+    let _c5: &CusBor = (&c1).borrow();  // impl<'_, T> Borrow<T> for &'_ T
 
     // impl Borrow<T> for U
     // let u = U;
@@ -105,26 +105,20 @@ fn borrow_mut_trait() {
 }
 
 fn to_owned_trait() {
-    // different from Clone trait,
-    // Clone works only for going from &T to T,
-    // ToOwned can owned data from any borrow of a give type.
-
     let s: &str = "Rustacean";
     let _os: String = s.to_owned(); // impl ToOwned for str (type Owned = String)
 
-    let s: String = "Rustacean".to_string();
+    let s: &String = &("Rustacean".to_string());
     let _os: String = s.to_owned(); // impl<T> ToOwned for T (type Owned = T)
 
     let v: &[i32] = &[1, 2, 3];
     let _vo: Vec<i32> = v.to_owned(); // impl<T> ToOwned for [T] (type Owned = Vec<T, Global>)
 
     let v: &[i32; 3] = &[1, 2, 3];
-    let _vo: [i32; 3] = v.to_owned(); // impl<T> ToOwned for T (type Owned = T)
+    let _vo: [i32; 3] = v.to_owned();  // impl<T> ToOwned for T (type Owned = T)
 
-    // impl ToOwned for T (type Owned = U)
-    //  U must meet condition: impl Borrow<T> for U
-    // let t = T;
-    // let u: U = t.to_owned();
+    let v: Vec<i32> = vec![1, 2, 3];
+    let _vo: Vec<i32> = (&v).to_owned();
 }
 
 fn copy_trait() {
