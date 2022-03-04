@@ -74,8 +74,6 @@ fn main() {
     let _a2: &&AutoBorrow = &a.borrow();         // impl<T: ?Sized> Borrow<T> for T
     let _a4: &AutoBorrow = &mut a.borrow();      // impl<T: ?Sized> Borrow<T> for &mut T
     let _a5: &mut &AutoBorrow = &mut a.borrow(); // impl<T: ?Sized> Borrow<T> for T
-
-    assert_eq!(a.borrow(), &a);
 }
 ```
 

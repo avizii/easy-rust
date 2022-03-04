@@ -1,7 +1,8 @@
 # Rust Tutorial For Rustacean
 
-
 - [所有权系统](ownership/summary.md)
+- [字符串]()
+- [集合类型]()
 - [特征trait](trait/summary.md)
     - [impl方法](trait/impl.md)
     - [特征定义](trait/trait.md)
@@ -10,4 +11,7 @@
         - [AsRef & AsMut](trait/common/AsRef_AsMut.md)
         - [Borrow & BorrowMut](trait/common/Borrow_BorrowMut.md)
         - [ToOwned](trait/common/ToOwned.md)
+        - [From & Into](trait/common/From_Into.md)
+        - [TryFrom & TryInto](trait/common/TryFrom_TryInto.md)
 - [指针类型](pointer/summary.md)
+- [异常处理]()

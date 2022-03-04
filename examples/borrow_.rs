@@ -26,8 +26,6 @@ fn auto_borrow() {
     let _a2: &&AutoBorrow = &a.borrow();         // impl<T: ?Sized> Borrow<T> for T
     let _a4: &AutoBorrow = &mut a.borrow();      // impl<T: ?Sized> Borrow<T> for &mut T
     let _a5: &mut &AutoBorrow = &mut a.borrow(); // impl<T: ?Sized> Borrow<T> for T
-
-    assert_eq!(a.borrow(), &a);
 }
 
 // Borrow trait
@@ -123,6 +121,71 @@ fn to_owned_trait() {
 
 fn copy_trait() {
 
+}
+
+fn as_ref_trait() {
+    let s = "Rustacean";
+    let _s1: &str = s.as_ref();
+    let _s2: &[u8] = s.as_ref();
+
+    let s = "Rustacean".to_string();
+    let _s1: &str = s.as_ref();
+    let _s2: &[u8] = s.as_ref();
+
+    let s: &[u32] = &[1, 2, 3];
+    let _sr: &[u32] = s.as_ref();
+
+    let v = vec![1, 2, 3];
+    let _vr1: &Vec<i32> = v.as_ref();
+    let _vr2: &[i32] = v.as_ref();
+
+    struct AsT {
+        num: u8,
+    }
+
+    impl AsRef<u8> for AsT {
+        fn as_ref(&self) -> &u8 {
+            &self.num
+        }
+    }
+
+    let a = AsT {
+        num: 8
+    };
+
+    let _ar: &u8 = a.as_ref();
+}
+
+fn as_mut_trait() {
+    let mut s = "Rustacean".to_string();
+    let _s: &mut str = s.as_mut();
+
+    let mut a: [u32; 3] = [1, 2, 3];
+    let _a: &mut [u32] = a.as_mut();
+
+    let mut v: Vec<i32> = vec![1, 2, 3];
+    let _vr1: &mut Vec<i32> = v.as_mut();
+    let _vr2: &mut [i32] = v.as_mut();
+
+    #[derive(Debug)]
+    struct AsT {
+        num: u8,
+    }
+
+    impl AsMut<u8> for AsT {
+        fn as_mut(&mut self) -> &mut u8 {
+            &mut self.num
+        }
+    }
+
+    let mut a = AsT {
+        num: 8
+    };
+
+    let num: &mut u8 = a.as_mut();
+    *num = 10;
+
+    println!("{:?}", a);
 }
 
 //
@@ -251,5 +314,12 @@ mod tests {
         copy_trait();
 
         cow_trait();
+    }
+
+    #[test]
+    fn test_as_ref_mut_trait() {
+        as_ref_trait();
+
+        as_mut_trait()
     }
 }
