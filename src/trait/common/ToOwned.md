@@ -9,7 +9,9 @@ pub trait ToOwned {
 }
 ```
 
-`ToOwned` 与 `Clone` 一样，也是用于对象数据拷贝。不同的是，`Clone` 只适用于从 `&T` 到 `T`。而 `ToOwned` 可以实现从 &U 到 T 的拷贝，只需满足 `impl Borrow<U> for T` 这个条件。
+`ToOwned` 与 `Clone` 一样，也是用于对象数据拷贝。不同的是，`Clone` 只适用于从 `&T` 到 `T`。
+
+而 `ToOwned` 可以实现从 `&U` 到 `T` 的拷贝，只需满足 `impl Borrow<U> for T` 这个条件。
 
 伪代码模板如下：
 
@@ -33,7 +35,9 @@ let t: T = u.to_owned();
 
 可以这样理解：`impl Borrow<U> for T` 表示 `T` 的不可变引用是 `&U`，反过来看，从引用 `&U` 拷贝数据，得到对象 `T`。
 
-举个例子，用字符串切片 `&str` 或者字符串引用 `&String` 调用 `.to_owned()` 拷贝数据，都能得到拥有所有权的 `String` 对象，因为标准库实现了 `impl Borrow<str> for String`:
+举个例子，用字符串切片 `&str` 或者字符串引用 `&String` 调用 `.to_owned()` 拷贝数据，都能得到拥有所有权的 `String` 对象。
+
+能实现这样的效果，因为标准库为 `String` 提供实现 `impl Borrow<str> for String`。代码如下：
 
 ```rust
 fn main() {
