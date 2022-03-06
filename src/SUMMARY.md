@@ -1,7 +1,7 @@
 # Rust Tutorial For Rustacean
 
 - [所有权系统](ownership/summary.md)
-- [字符串]()
+- [字符串 &str 和 String]()
 - [集合类型]()
 - [特征trait](trait/summary.md)
     - [impl方法](trait/impl.md)
@@ -13,5 +13,11 @@
         - [ToOwned](trait/common/ToOwned.md)
         - [From & Into](trait/common/From_Into.md)
         - [TryFrom & TryInto](trait/common/TryFrom_TryInto.md)
+- [闭包](closure/closure.md)
 - [指针类型](pointer/summary.md)
-- [异常处理]()
+- [异常处理](exception/summary.md)
+  - [panic!()](exception/panic.md)
+  - [unwrap() & expect()](exception/unwrap_expect.md)
+  - [Option](exception/option.md)
+  - [Result](exception/result.md)
+  - [? 操作符](exception/question_mark.md)
