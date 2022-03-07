@@ -49,6 +49,20 @@ fn main() {
 }
 ```
 
+## 普遍实现 blanket implemention
+```rust
+impl<T> ToOwned for [T]
+where
+    T: Clone, 
+type Owned = Vec<T, Global>
+
+
+impl<T> ToOwned for T
+where
+    T: Clone, 
+type Owned = T
+```
+
 ## 方法说明
 
 

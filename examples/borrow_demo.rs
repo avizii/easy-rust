@@ -205,7 +205,6 @@ fn from_into_trait() {
 //
 fn clone_trait() {
     let s: &str = "Rustacean";
-    s.parse()
     let _sc: &str = s.clone();
 
     let s: String = "Rustacean".to_string();
@@ -223,98 +222,9 @@ fn clone_trait() {
     s.clone_from(&source);
 }
 
-fn cow_trait() {
-    cow_scene();
-}
-
-fn cow_scene() {
-    let url = Url::parse("https://rust-lang.org/rust?page=1024&sort=desc&extra=hello%20world").unwrap();
-    let mut pairs = url.query_pairs();
-
-    assert_eq!(pairs.count(), 3);
-
-    let (mut k, v) = pairs.next().unwrap();
-
-    println!("key: {}, value: {}", k, v);
-
-    k.to_mut().push_str("_lake");
-
-    print_pair((k, v));
-
-    print_pair(pairs.next().unwrap());
-
-    print_pair(pairs.next().unwrap());
-}
-
-fn print_pair(pair: (Cow<str>, Cow<str>)) {
-    println!("key: {}, value: {}", show_cow(pair.0), show_cow(pair.1));
-}
-
-fn show_cow(cow: Cow<str>) -> String {
-    match cow {
-        Cow::Borrowed(v) => format!("Cow::Borrowed=>{}", v),
-        Cow::Owned(v) => format!("Cow::Owned=>{}", v),
-    }
-}
-
-fn modulo_3(input: u8) -> Cow<'static, str> {
-    match input % 3 {
-        0 => "remainder is 0.".into(),
-        1 => "remainder is 1.".into(),
-        remainder => format!("remainder is {}.", remainder).into(),
-    }
-}
-
-fn abs_all(input: &mut Cow<[i32]>) {
-    for i in 0..input.len() {
-        let v = input[i];
-        if v < 0 {
-            input.to_mut()[i] = -v;
-        }
-    }
-}
-
-fn print_cow(input: &Cow<[i32]>) {
-    match input {
-        Cow::Borrowed(_) => println!("Cow::Borrowed."),
-        Cow::Owned(_) => println!("Cow::Owned."),
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    #[test]
-    fn test_modulo_3() {
-        for num in 1..=6 {
-            match modulo_3(num) {
-                Cow::Borrowed(msg) => println!("Cow::Borrowed for num: {}, msg: {}", num, msg),
-                Cow::Owned(msg) => println!("Cow::Owned for num: {}, msg: {}", num, msg),
-            }
-        }
-    }
-
-    #[test]
-    fn test_abs_all() {
-        let slice = [1, 2, 3];
-        let mut input = Cow::from(&slice[..]);
-        print_cow(&input);
-        abs_all(&mut input);
-        print_cow(&input);
-
-        let slice = [-1, 0, 1];
-        let mut input = Cow::from(&slice[..]);
-        print_cow(&input);
-        abs_all(&mut input);
-        print_cow(&input);
-
-        let vec = vec![-1, 0, 1];
-        let mut input = Cow::from(vec);
-        print_cow(&input);
-        abs_all(&mut input);
-        print_cow(&input);
-    }
 
     #[test]
     fn test_all_ownership_trait() {
@@ -328,7 +238,6 @@ mod tests {
 
         copy_trait();
 
-        cow_trait();
     }
 
     #[test]
