@@ -13,6 +13,7 @@
         - [ToOwned](trait/common/ToOwned.md)
         - [From & Into](trait/common/From_Into.md)
         - [TryFrom & TryInto](trait/common/TryFrom_TryInto.md)
+        - [FromStr](trait/common/FromStr.md)
 - [闭包](closure/closure.md)
 - [指针类型](pointer/summary.md)
 - [异常处理](exception/summary.md)

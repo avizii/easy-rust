@@ -188,9 +188,24 @@ fn as_mut_trait() {
     println!("{:?}", a);
 }
 
+fn from_into_trait() {
+    let s: &str = "Rustacean";
+    let _s1: String = String::from(s);
+
+    let s: &str = "Rustacean";
+    let _s2: String = s.into();
+
+
+    let s = "Rustacean";
+
+    // impl TryFrom<i32> for u64
+    let _num: i32 = i32::try_from(20_u64).unwrap();
+    let _num: i32 = 20_u64.try_into().unwrap();
+}
 //
 fn clone_trait() {
     let s: &str = "Rustacean";
+    s.parse()
     let _sc: &str = s.clone();
 
     let s: String = "Rustacean".to_string();
