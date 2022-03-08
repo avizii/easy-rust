@@ -32,3 +32,5 @@
   - [panic!()](exception/panic.md)
   - [unwrap() & expect()](exception/unwrap_expect.md)
   - [catch_unwind](exception/catch_unwind.md)
+  - [第三方库：thiserror](exception/thiserror.md)
+  - [第三方库：anyhow](exception/anyhow.md)
